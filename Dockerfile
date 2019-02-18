@@ -1,7 +1,6 @@
 FROM minio/mc
 
-ENV CRON_SCHEDULE="*/10 * * *" \
-    SOURCE_BUCKET=backup \
+ENV SOURCE_BUCKET=backup \
     SOURCE_URL=http://primary.backups.example.org
 
 COPY ./mirroring_entrypoint.sh /

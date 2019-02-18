@@ -19,7 +19,7 @@ services:
         image: wolnosciowiec/riot-mc-mirror
         environment:
             # when (in crontab syntax)
-            - CRON_SCHEDULE="*/10 * * *"
+            - CRON_SCHEDULE=*/10 * * * *
             - MIRROR_OPTS=--debug  # optional Minio Client options
 
             - SOURCE_URL=http://primary.backups.example.org
