@@ -1,4 +1,4 @@
-FROM balenalib/armv7hf-alpine
+FROM balenalib/armv7hf-alpine:3.9
 
 ENV SOURCE_BUCKET=backup \
     SOURCE_URL=http://primary.backups.example.org
