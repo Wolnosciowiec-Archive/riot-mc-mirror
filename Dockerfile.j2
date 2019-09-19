@@ -1,0 +1,50 @@
+FROM {{ IMAGE }}
+
+LABEL maintainer="RiotKit" \
+  org.label-schema.name="riot-mc-mirror" \
+  org.label-schema.arch="{{ ARCH }}" \
+  org.label-schema.description="Minio Client packed with crontab and programmed to synchronize two buckets" \
+  org.label-schema.url="https://github.com/riotkit-org" \
+  org.label-schema.vcs-url="https://github.com/riotkit-org/riot-mc-mirror" \
+  org.label-schema.vendor="RiotKit" \
+  org.label-schema.version="{{ VERSION }}"
+
+ENV SOURCE_URL=http://primary.backups.example.org \
+    # Access token to access resources on source S3
+    SOURCE_ACCESS_TOKEN=some-token \
+    # Secret to access resources on source S3
+    SOURCE_SECRET=some-secret \
+    # Bucket name from which the data will be copied from
+    SOURCE_BUCKET=test-src-bucket \
+    # URL of the target S3 where the files will be synchronized to
+    TARGET_URL=http://some-minio-instance \
+    # Access to the copy target
+    TARGET_ACCESS_TOKEN=test \
+    # Access to the copy target
+    TARGET_SECRET=test \
+    # Bucket name on target S3
+    TARGET_BUCKET=test-bucket \
+    # Options passed to "mc mirror" command
+    MIRROR_OPTS=--json \
+    # Crontab schedule
+    CRON_SCHEDULE="*/5 * * * *"
+
+
+COPY bin/mirroring_entrypoint.sh /
+COPY bin/scheduled_mirroring.sh /
+
+{% if ARCH == "arm" %}
+RUN [ "cross-build-start" ]
+{% endif %}
+
+RUN apk add --update bash sed \
+    && addgroup -g 1050 mirroring_comrade \
+    && adduser -D -u 1050 -G mirroring_comrade mirroring_comrade \
+    && chmod +x /mirroring_entrypoint.sh /scheduled_mirroring.sh /download_minio_version.sh \
+    && /download_minio_version.sh {{ VERSION }}
+
+{% if ARCH == "arm" %}
+RUN [ "cross-build-end" ]
+{% endif %}
+
+ENTRYPOINT "/mirroring_entrypoint.sh"

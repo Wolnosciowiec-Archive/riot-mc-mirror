@@ -41,37 +41,10 @@ Configuration reference
 List of all environment variables that could be used.
 
 ```yaml
+{% for env_var, attrs in DOCKERFILE_ENVS.items() %}{% if attrs[2] %}# {{ attrs[2] }}{% endif %}
+- {{ attrs[0] }} # (default: {{ attrs[1] }})
 
-- SOURCE_URL # (default: http://primary.backups.example.org)
-
-# Access token to access resources on source S3
-- SOURCE_ACCESS_TOKEN # (default: some-token)
-
-# Secret to access resources on source S3
-- SOURCE_SECRET # (default: some-secret)
-
-# Bucket name from which the data will be copied from
-- SOURCE_BUCKET # (default: test-src-bucket)
-
-# URL of the target S3 where the files will be synchronized to
-- TARGET_URL # (default: http://some-minio-instance)
-
-# Access to the copy target
-- TARGET_ACCESS_TOKEN # (default: test)
-
-# Access to the copy target
-- TARGET_SECRET # (default: test)
-
-# Bucket name on target S3
-- TARGET_BUCKET # (default: test-bucket)
-
-# Options passed to "mc mirror" command
-- MIRROR_OPTS # (default: --json)
-
-# Crontab schedule
-- CRON_SCHEDULE # (default: "*/5 * * * *")
-
-
+{% endfor %}
 ```
 
 Developing the container
