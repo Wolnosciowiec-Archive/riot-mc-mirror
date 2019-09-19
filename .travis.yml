@@ -11,7 +11,7 @@ before_script:
     - curl "https://raw.githubusercontent.com/riotkit-org/ci-utils/master/ci-integration/travis.sh" -s | bash
 
     # activate ARM builds on travis
-    - /opt/riotkit/utils/setup-travis-arm-builds
+    - /opt/riotkit/utils/bin/setup-travis-arm-builds
 
     # authorization
     - echo "$DOCKER_PASSWORD" | sudo docker login -u "$DOCKER_USERNAME" --password-stdin
