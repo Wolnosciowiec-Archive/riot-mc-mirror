@@ -30,8 +30,7 @@ ENV SOURCE_URL=http://primary.backups.example.org \
     CRON_SCHEDULE="*/5 * * * *"
 
 
-COPY bin/mirroring_entrypoint.sh /
-COPY bin/scheduled_mirroring.sh /
+COPY bin/*.sh /
 
 {% if ARCH == "arm" %}
 RUN [ "cross-build-start" ]
@@ -40,7 +39,7 @@ RUN [ "cross-build-start" ]
 RUN apk add --update bash sed \
     && addgroup -g 1050 mirroring_comrade \
     && adduser -D -u 1050 -G mirroring_comrade mirroring_comrade \
-    && chmod +x /mirroring_entrypoint.sh /scheduled_mirroring.sh /download_minio_version.sh \
+    && chmod +x /*.sh \
     && /download_minio_version.sh {{ VERSION }}
 
 {% if ARCH == "arm" %}
