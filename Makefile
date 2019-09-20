@@ -1,5 +1,5 @@
 SUDO=sudo
-RIOTKIT_UTILS_VER=master
+RIOTKIT_UTILS_VER=v2.0.0
 .SILENT:
 SHELL=/bin/bash
 PUSH=true
