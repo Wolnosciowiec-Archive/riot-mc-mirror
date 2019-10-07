@@ -1,3 +1,14 @@
+{% if ARCH == "arm" %}
+FROM golang:1.13 as builder
+
+RUN set -x \
+    && cd /opt \
+    && git clone https://github.com/minio/mc -b {{ VERSION }} \
+    && cd /opt/mc \
+    && GOOS=linux GOARCH=arm64 go build -tags kqueue -o /usr/bin/mc \
+    && test -f /usr/bin/mc
+{% endif %}
+
 FROM {{ IMAGE }}
 
 LABEL maintainer="RiotKit" \
@@ -33,14 +44,17 @@ ENV SOURCE_URL=http://primary.backups.example.org \
 COPY bin/*.sh /
 
 {% if ARCH == "arm" %}
+COPY --from=builder /usr/bin/mc /usr/bin/mc
+
 RUN [ "cross-build-start" ]
 {% endif %}
 
 RUN apk add --update bash sed \
     && addgroup -g 1050 mirroring_comrade \
     && adduser -D -u 1050 -G mirroring_comrade mirroring_comrade \
-    && chmod +x /*.sh \
+    && chmod +x /*.sh {% if ARCH != "arm" %}\
     && /download_minio_version.sh {{ VERSION }}
+    {% endif %}
 
 {% if ARCH == "arm" %}
 RUN [ "cross-build-end" ]

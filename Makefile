@@ -28,7 +28,7 @@ build_x86_64: ## Build x86-64 image (args: VERSION)
 	make generate_dockerfile _build ARCH=x86_64 IMAGE=alpine:3.9 VERSION=${VERSION} PUSH=${PUSH}
 
 build_arm: ## Build ARM image (args: VERSION)
-	make generate_dockerfile _build ARCH=arm IMAGE=balenalib/armv7hf-alpine:3.9 VERSION=${VERSION} PUSH=${PUSH}
+	make generate_dockerfile _build ARCH=arm IMAGE=balenalib/aarch64-alpine:3.9 VERSION=${VERSION} PUSH=${PUSH}
 
 _build:
 	${SUDO} docker build . -f ./Dockerfile -t quay.io/riotkit/riot-mc-mirror:${VERSION}-${ARCH}
