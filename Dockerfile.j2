@@ -5,7 +5,7 @@ RUN set -x \
     && cd /opt \
     && git clone https://github.com/minio/mc -b {{ VERSION }} \
     && cd /opt/mc \
-    && GOOS=linux GOARCH=arm64 go build -tags kqueue -o /usr/bin/mc \
+    && GOOS=linux GOARCH=arm go build -tags kqueue -o /usr/bin/mc \
     && test -f /usr/bin/mc
 {% endif %}
 
